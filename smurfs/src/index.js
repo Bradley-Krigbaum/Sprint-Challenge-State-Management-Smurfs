@@ -1,6 +1,15 @@
-import React from "react";
+import React, { createContext } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/App";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+export const smurfContext = createContext();
+// console.log("bk: Index.js: smurfContext: ", smurfContext);
+
+
+
+ReactDOM.render(
+    <smurfContext.Provider >
+        <App />
+    </smurfContext.Provider>, 
+    document.getElementById("root"));
