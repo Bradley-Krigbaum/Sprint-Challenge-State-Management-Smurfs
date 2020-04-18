@@ -36,6 +36,8 @@ class App extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     // this.setState(() => this.initialState)
+
+    this.forceUpdate()
   }
 
   handleNameChange = e => {
@@ -59,12 +61,12 @@ class App extends Component {
       height: smurfHeight
     };
     // console.log('bk: addedSmurf: obj: addedSmurf: ', addedSmurf)
+
+    // this.refs.inputName.value = '';
+    // this.refs.inputAge.value = '';
+    // this.refs.inputHeight.value = '';
+
     return this.state.smurf.push(addedSmurf);
-  }
-
-  resetSmurfForm = () => {
-
-    // this.setState(() => this.initialState)
   }
 
   render() {
@@ -84,24 +86,26 @@ class App extends Component {
           <section>
             <input 
               type="text"
+              ref='inputName'
               placeholder='Enter Smurf Name'
               value={this.state.name}
               onChange={this.handleNameChange}
             />
             <input 
               type="text"
+              ref='inputAge'
               placeholder='Enter Age'
               value={this.state.age}
               onChange={this.handleAgeChange}
             />
             <input 
               type="text"
+              ref='inputHeight'
               placeholder='Enter Height'
               value={this.state.height}
               onChange={this.handleHeightChange}
             />
             <button onClick={this.addNewSmurf}>Send</button>
-            <button onClick={this.resetSmurfForm}>Reset</button>
           </section>
           
         </form>

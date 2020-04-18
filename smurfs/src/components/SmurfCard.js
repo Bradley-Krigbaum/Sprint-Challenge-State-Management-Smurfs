@@ -4,7 +4,7 @@ function SmurfCard(props) {
 
     return (
         <>
-            {/* {console.log('bk: UserCard.js: UserCard: props: ', props)} */}
+            {console.log('bk: SmurfCard.js: SmurfCard: props: ', props)}
 
             <div key={props.smurf.id} className='Smurf'>
                 <h4>{props.smurf.name}</h4>
