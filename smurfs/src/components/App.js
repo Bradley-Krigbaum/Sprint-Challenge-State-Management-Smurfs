@@ -1,6 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import "./App.css";
+import axios from 'axios';
 import SmurfCard from './SmurfCard';
+
+import smurfContext from '../index';
 
 
 class App extends Component {
@@ -12,7 +15,9 @@ class App extends Component {
     height: ""
   };
 
+
   state = this.initialState
+
 
   componentDidMount() {
     console.log('bk: App.js: CDM: component mounted')
@@ -26,19 +31,9 @@ class App extends Component {
   componentDidUpdate(prevState) {
     console.log("bk: App.js: CDU: component updated");
     if (prevState.smurf !== this.state.smurf) {
-      // console.log("bk: App.js: CDU: user state has changed");
-      // console.log('CDU: user state: ', this.state.users);
-      // console.log('CDU: user name: ', this.state.userName);
-
     }
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    // this.setState(() => this.initialState)
-
-    this.forceUpdate()
-  }
 
   handleNameChange = e => {
     this.setState({...this.state, name: e.target.value});
@@ -62,11 +57,32 @@ class App extends Component {
     };
     // console.log('bk: addedSmurf: obj: addedSmurf: ', addedSmurf)
 
-    // this.refs.inputName.value = '';
-    // this.refs.inputAge.value = '';
-    // this.refs.inputHeight.value = '';
-
     return this.state.smurf.push(addedSmurf);
+  }
+
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.forceUpdate()
+
+    const newSmurfAge = Number(this.state.age);
+
+    const postNewSmurf = {
+      name: this.state.name,
+      age: newSmurfAge,
+      height: this.state.height
+      // id: this.state.id
+    };
+
+    this.setState({...this.state, postNewSmurf })
+
+    axios.post('http://localhost:3333/smurfs', this.state.postNewSmurf)
+     .then(function(response){
+       console.log("POST: ", response);
+   })
+     .catch(function(error){
+       console.log(error);
+     });
   }
 
   render() {
@@ -78,41 +94,44 @@ class App extends Component {
           <div>Welcome to your state management version of Smurfs!</div>
           <div>Start inside of your `src/index.js` file!</div>
           <div>Have fun!</div>
+        
+
+          <p>Please Enter The Information Below To Add A New Smurf To The Village</p>
+
+          <form onSubmit={this.handleSubmit} id='smurf-form'>
+            <section>
+              <input 
+                type="text"
+                ref='inputName'
+                placeholder='Enter Smurf Name'
+                value={this.state.name}
+                onChange={this.handleNameChange}
+              />
+              <input 
+                type="text"
+                ref='inputAge'
+                placeholder='Enter Age'
+                value={this.state.age}
+                onChange={this.handleAgeChange}
+              />
+              <input 
+                type="text"
+                ref='inputHeight'
+                placeholder='Enter Height'
+                value={this.state.height}
+                onChange={this.handleHeightChange}
+              />
+              <button onClick={this.addNewSmurf}>Send</button>
+            </section>
+            
+          </form>
+
+          <smurfContext.Provider value={this.state.smurf} >
+            <div className='SmurfCard'>
+              <SmurfCard />
+            </div>
+          </smurfContext.Provider>
         </div>
-
-        <p>Please Enter The Information Below To Add A New Smurf To The Village</p>
-
-        <form onSubmit={this.handleSubmit} id='smurf-form'>
-          <section>
-            <input 
-              type="text"
-              ref='inputName'
-              placeholder='Enter Smurf Name'
-              value={this.state.name}
-              onChange={this.handleNameChange}
-            />
-            <input 
-              type="text"
-              ref='inputAge'
-              placeholder='Enter Age'
-              value={this.state.age}
-              onChange={this.handleAgeChange}
-            />
-            <input 
-              type="text"
-              ref='inputHeight'
-              placeholder='Enter Height'
-              value={this.state.height}
-              onChange={this.handleHeightChange}
-            />
-            <button onClick={this.addNewSmurf}>Send</button>
-          </section>
-          
-        </form>
-
-        {this.state.smurf.map(newSmurf => (
-            <SmurfCard smurf={newSmurf} key={newSmurf.id}/>
-          ))}
       </>
     );
   }
